@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: alibaba-gateway
+  profiles:
+    active: dev
+  main:
+    allow-bean-definition-overriding: true
