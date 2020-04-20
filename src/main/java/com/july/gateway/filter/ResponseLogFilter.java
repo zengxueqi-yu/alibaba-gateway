@@ -37,6 +37,8 @@ import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * 请求响应日志打印
+ * @author zengxueqi
+ * @since 2020/4/20
  */
 @Component
 @Slf4j
@@ -47,6 +49,14 @@ public class ResponseLogFilter implements GlobalFilter, Ordered {
         return OrderedConstant.LOGGING_FILTER;
     }
 
+    /**
+     * 响应日志过滤器
+     * @param exchange
+     * @param chain
+     * @return reactor.core.publisher.Mono<java.lang.Void>
+     * @author zengxueqi
+     * @since 2020/4/20
+     */
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         try {
@@ -91,7 +101,7 @@ public class ResponseLogFilter implements GlobalFilter, Ordered {
                                 NettyDataBufferFactory nettyDataBufferFactory = new NettyDataBufferFactory(new UnpooledByteBufAllocator(false));
                                 DataBuffer bodyDataBuffer = nettyDataBufferFactory.wrap(reqBody.getBytes());
                                 return Flux.just(bodyDataBuffer);
-//                                return Flux.just(reqBody).map(bx -> exchange.getRequest().bufferFactory().wrap(bx.getBytes()));
+                                //return Flux.just(reqBody).map(bx -> exchange.getRequest().bufferFactory().wrap(bx.getBytes()));
                             }
                         };
                         ServerHttpResponseDecorator responseDecorator = getServerHttpResponseDecorator(exchange,
@@ -108,7 +118,6 @@ public class ResponseLogFilter implements GlobalFilter, Ordered {
                         .response(decoratedResponse)
                         .build());
             }
-
         } catch (Exception e) {
             log.error("请求响应日志打印出现异常", e);
             return chain.filter(exchange);
@@ -116,8 +125,15 @@ public class ResponseLogFilter implements GlobalFilter, Ordered {
 
     }
 
-    private ServerHttpResponseDecorator getServerHttpResponseDecorator(ServerWebExchange exchange,
-                                                                       AtomicReference<String> requestBody) {
+    /**
+     * ServerHttpResponse封装
+     * @param exchange
+     * @param requestBody
+     * @return org.springframework.http.server.reactive.ServerHttpResponseDecorator
+     * @author zengxueqi
+     * @since 2020/4/20
+     */
+    private ServerHttpResponseDecorator getServerHttpResponseDecorator(ServerWebExchange exchange, AtomicReference<String> requestBody) {
         // 获取response的返回数据
         ServerHttpResponse originalResponse = exchange.getResponse();
         DataBufferFactory bufferFactory = originalResponse.bufferFactory();
@@ -129,7 +145,6 @@ public class ResponseLogFilter implements GlobalFilter, Ordered {
         HttpHeaders headers = request.getHeaders();
         String method = request.getMethodValue().toUpperCase();
         String requestId = headers.getFirst(HeaderConstant.REQUEST_ID);
-
         // 封装返回体
         return new ServerHttpResponseDecorator(originalResponse) {
             @Override
@@ -160,7 +175,6 @@ public class ResponseLogFilter implements GlobalFilter, Ordered {
                         exchange.getSession().subscribe(webSession -> {
                             logDTO.setSessionId(webSession.getId());
                         });
-
                         log.info("url:{},method:{},请求内容:{},响应内容:{},status:{},handleTime:{},requestId:{}",
                                 url, method, requestBody.get(), responseBody, httpStatus,
                                 handleTime, requestId);

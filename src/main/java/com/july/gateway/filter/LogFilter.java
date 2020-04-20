@@ -18,6 +18,14 @@ import reactor.core.publisher.Mono;
 //@Component
 public class LogFilter implements GlobalFilter, Ordered {
 
+    /**
+     * 日志过滤器
+     * @param exchange
+     * @param chain
+     * @return reactor.core.publisher.Mono<java.lang.Void>
+     * @author zengxueqi
+     * @since 2020/4/20
+     */
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         CacheServerHttpRequestDecorator cacheServerHttpRequestDecorator = new CacheServerHttpRequestDecorator(exchange.getRequest());

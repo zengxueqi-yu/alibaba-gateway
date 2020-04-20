@@ -11,6 +11,8 @@ import java.util.Objects;
 
 /**
  * 获取IP工具类
+ * @author zengxueqi
+ * @since 2020/4/20
  */
 public class IpUtils {
 
@@ -18,7 +20,10 @@ public class IpUtils {
 
     /**
      * 获取本机IP
-     * @return 本机IP
+     * @param
+     * @return java.lang.String 本机IP
+     * @author zengxueqi
+     * @since 2020/4/20
      */
     public static String getLocalIp() {
         String os = System.getProperty("os.name");
@@ -49,7 +54,10 @@ public class IpUtils {
 
     /**
      * 获取Linux服务器的本地IP
-     * @return IP
+     * @param
+     * @return java.lang.String
+     * @author zengxueqi
+     * @since 2020/4/20
      */
     private static String getLocalIpFromLinux() {
         String ip = IP_UNKNOWN;
@@ -92,7 +100,10 @@ public class IpUtils {
 
     /**
      * 获取Windows服务器的本地IP
-     * @return IP
+     * @param
+     * @return java.lang.String
+     * @author zengxueqi
+     * @since 2020/4/20
      */
     private static String getLocalIpFromWindows() {
         String localIp;
@@ -107,7 +118,10 @@ public class IpUtils {
 
     /**
      * 获取主机名
-     * @return 主机名
+     * @param
+     * @return java.lang.String
+     * @author zengxueqi
+     * @since 2020/4/20
      */
     public static String getHostName() {
         String hostName;
@@ -121,8 +135,10 @@ public class IpUtils {
 
     /**
      * 获取客户端IP
-     * @param request ServerHttpRequest
-     * @return 客户端IP
+     * @param request
+     * @return java.lang.String 客户端IP
+     * @author zengxueqi
+     * @since 2020/4/20
      */
     public static String getClientIp(@NonNull ServerHttpRequest request) {
         String result = null;
@@ -146,14 +162,13 @@ public class IpUtils {
 
     /**
      * 获取IP+主机名
-     * @return [IP+,+主机名]
+     * @param
+     * @return java.lang.String [IP+,+主机名]
+     * @author zengxueqi
+     * @since 2020/4/20
      */
     public static String getIpWithBracketWrap() {
         return FormatUtils.wrapStringWithBracket(getLocalIp() + "," + getHostName());
     }
-
-    public static void main(String[] args) {
-        System.out.println(getLocalIpFromWindows());
-        System.out.println(getLocalIpFromLinux());
-    }
+    
 }

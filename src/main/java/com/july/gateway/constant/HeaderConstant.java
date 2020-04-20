@@ -5,9 +5,9 @@ package com.july.gateway.constant;
  */
 public interface HeaderConstant {
 
-    // 日志相关 start
+    //日志相关start
     String START_TIME_KEY = "X-St";
     String REQUEST_ID = "X-Request-Id";
-    // 日志相关 end
+    //日志相关 nd
 
 }

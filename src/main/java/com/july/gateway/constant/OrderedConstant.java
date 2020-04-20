@@ -6,6 +6,8 @@ import static org.springframework.cloud.gateway.filter.NettyWriteResponseFilter.
 
 /**
  * filter排序码
+ * @author zengxueqi
+ * @since 2020/4/20
  */
 public interface OrderedConstant extends Ordered {
 

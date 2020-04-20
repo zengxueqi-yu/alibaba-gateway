@@ -76,6 +76,12 @@ public class JsonExceptionHandler implements ErrorWebExceptionHandler {
         this.messageWriters = messageWriters;
     }
 
+    /**
+     * 异常处理器
+     * @param exchange
+     * @param ex
+     * @return
+     */
     @Override
     public Mono<Void> handle(ServerWebExchange exchange, Throwable ex) {
         // 按照异常类型进行处理

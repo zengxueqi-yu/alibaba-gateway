@@ -16,6 +16,7 @@ import java.util.Properties;
 public class BnException extends RuntimeException {
 
     private static final long serialVersionUID = -1494138156106032736L;
+
     /**
      * 属性对象
      */
@@ -36,7 +37,6 @@ public class BnException extends RuntimeException {
      * 错误编码10001
      */
     public static final Integer NONBLANK = 10001; // 不允许长度为0
-
     /**
      * 异常编码,默认编码99999
      */

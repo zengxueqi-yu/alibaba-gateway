@@ -16,7 +16,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
-import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -36,15 +35,21 @@ import java.util.Arrays;
 @Component
 public class AuthFilter implements GlobalFilter, Ordered {
 
+    /**
+     * JWT生成密钥
+     */
     @Value("${jwt.secret.key}")
     private String secretKey;
-
+    /**
+     * 白名单(无需验证Token信息)
+     */
     @Value("${whitelist.authExcludeUrl}")
     private String[] skipAuthUrls;
-
-    @Value("${whitelist.authExcludeUrl}")
+    /**
+     * Token黑名单，存储Key(用处狭隘)
+     */
+    @Value("${jwt.blacklist.key.format}")
     private String jwtBlacklistKeyFormat;
-
     @Resource
     private StringRedisTemplate stringRedisTemplate;
 
@@ -53,6 +58,14 @@ public class AuthFilter implements GlobalFilter, Ordered {
         return -100;
     }
 
+    /**
+     * Token过滤与验证
+     * @param exchange
+     * @param chain
+     * @return reactor.core.publisher.Mono<java.lang.Void>
+     * @author zengxueqi
+     * @since 2020/4/20
+     */
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         String url = exchange.getRequest().getURI().getPath();
@@ -94,7 +107,9 @@ public class AuthFilter implements GlobalFilter, Ordered {
     /**
      * JWT验证
      * @param token
-     * @return userName
+     * @return java.lang.String
+     * @author zengxueqi
+     * @since 2020/4/20
      */
     private String verifyJWT(String token) {
         String userName = "";
@@ -115,7 +130,9 @@ public class AuthFilter implements GlobalFilter, Ordered {
     /**
      * 判断token是否在黑名单内
      * @param token
-     * @return
+     * @return boolean
+     * @author zengxueqi
+     * @since 2020/4/20
      */
     private boolean isBlackToken(String token) {
         assert token != null;

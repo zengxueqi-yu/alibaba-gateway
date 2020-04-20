@@ -34,6 +34,8 @@ import java.util.function.Consumer;
 
 /**
  * 请求日志打印
+ * @author zengxueqi
+ * @since 2020/4/20
  */
 @Component
 @Slf4j
@@ -44,6 +46,14 @@ public class RequestLogFilter implements GlobalFilter, Ordered {
         return OrderedConstant.REQUEST_FILTER;
     }
 
+    /**
+     * 请求日志过滤器
+     * @param exchange
+     * @param chain
+     * @return reactor.core.publisher.Mono<java.lang.Void>
+     * @author zengxueqi
+     * @since 2020/4/20
+     */
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         StopWatch stopWatch = new StopWatch();

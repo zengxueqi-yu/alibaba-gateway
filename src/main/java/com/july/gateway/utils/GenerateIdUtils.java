@@ -5,13 +5,16 @@ import java.util.UUID;
 /**
  * ID生成工具类
  * @author zengxueqi
- * @date: 2020-03-17 15:26
+ * @date: 2020/4/20
  */
 public class GenerateIdUtils {
 
     /**
      * 使用UUID生成RequestId
-     * @return RequestId
+     * @param
+     * @return java.lang.String
+     * @author zengxueqi
+     * @since 2020/4/20
      */
     public static String requestIdWithUUID() {
         return UUID.randomUUID().toString().replaceAll("-", "");

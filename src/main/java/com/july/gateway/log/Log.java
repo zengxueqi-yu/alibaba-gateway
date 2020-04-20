@@ -9,6 +9,8 @@ import java.time.ZonedDateTime;
 
 /**
  * 日志实体类，方便后续接入ELK
+ * @author zengxueqi
+ * @since 2020/4/20
  */
 @Data
 public class Log {
