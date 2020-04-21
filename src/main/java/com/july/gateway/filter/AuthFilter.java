@@ -4,6 +4,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.july.gateway.exception.BnException;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -24,6 +26,8 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import javax.annotation.Resource;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 鉴权过滤器
@@ -40,6 +44,11 @@ public class AuthFilter implements GlobalFilter, Ordered {
      */
     @Value("${jwt.secret.key}")
     private String secretKey;
+    /**
+     * Token过期时间(毫秒)
+     */
+    @Value("${token.expire.time}")
+    private long tokenExpireTime;
     /**
      * 白名单(无需验证Token信息)
      */
@@ -111,7 +120,7 @@ public class AuthFilter implements GlobalFilter, Ordered {
      * @author zengxueqi
      * @since 2020/4/20
      */
-    private String verifyJWT(String token) {
+    private String verifyJWT1(String token) {
         String userName = "";
         try {
             token = token.replace("Bearer ", "").trim();
@@ -125,6 +134,23 @@ public class AuthFilter implements GlobalFilter, Ordered {
             throw new BnException("Token已过期或者未启用！");
         }
         return userName;
+    }
+
+    /**
+     * JWT验证(Redis解决Token过期问题)
+     * @param token
+     * @return java.lang.String
+     * @author zengxueqi
+     * @since 2020/4/20
+     */
+    private String verifyJWT(String token) {
+        token = token.replace("Bearer ", "").trim();
+        String redisToken = stringRedisTemplate.opsForValue().get(token);
+        BnException.of(StringUtils.isEmpty(redisToken), "Token已过期或者未启用，请重新登录！");
+        String userInfo = stringRedisTemplate.opsForValue().get(token);
+        //重新刷新(每次验证Token，都重新设置Token的过期时间)
+        stringRedisTemplate.expire(token, tokenExpireTime, TimeUnit.MILLISECONDS);
+        return userInfo;
     }
 
     /**
