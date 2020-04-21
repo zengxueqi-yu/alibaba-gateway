@@ -128,19 +128,19 @@ public class BnException extends RuntimeException {
      * 返回异常消息,如果错误消息为空则返回全堆栈信息
      * @return 返回异常消息
      */
-//	public String message() {
-//		String msg=super.getMessage();
-//		if(msg==null || "null".equals(msg) || msg.trim().length()<=0) {
-//			try(StringWriter sw = new StringWriter();
-//				 PrintWriter pw = new PrintWriter(sw)) {
-//				this.printStackTrace(pw);
-//				return sw.toString();
-//			} catch (Exception ex) {
-//				return ex.getMessage();
-//			}
-//		}
-//		return msg;
-//	}
+	/*public String message() {
+		String msg=super.getMessage();
+		if(msg==null || "null".equals(msg) || msg.trim().length()<=0) {
+			try(StringWriter sw = new StringWriter();
+				 PrintWriter pw = new PrintWriter(sw)) {
+				this.printStackTrace(pw);
+				return sw.toString();
+			} catch (Exception ex) {
+				return ex.getMessage();
+			}
+		}
+		return msg;
+	}*/
     public String stackTrace() {
         return stackTrace(this);
     }

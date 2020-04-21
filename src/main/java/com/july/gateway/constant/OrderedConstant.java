@@ -15,7 +15,6 @@ public interface OrderedConstant extends Ordered {
      * 日志记录
      */
     int LOGGING_FILTER = WRITE_RESPONSE_FILTER_ORDER - 1;
-
     /**
      * request
      */
